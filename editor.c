@@ -16,6 +16,7 @@
 #define MAX_ROLLBAKC_STEP 20
 #define NULL 0
 
+
 char *strcat_n(char *dest, char *src, int len); //用于字符串拼接
 int get_line_number(char *text[]);
 void show_text(char *text[]);
@@ -48,14 +49,17 @@ int upper_bound = -1;
 char keyword[100] = {'\0'};
 int searching = 0;
 int text_mode = 0; //模式：0-正常文字模式；1-代码模式，开启代码高亮
-
+char opening_line[] = "____Welcome to YAW ----Yet Another Word for xv6____\n ____Input 'help' to get started!____";
+char logo[] = "         '%&$'    `|&%'    .|&&|`    `%&%'    '%&$'    :$&;  /-----/\n         `$##!   !##|     :@###&'    ;##&'   ;###@:   !##!  /     /\n          |##% '&#$`     |#@|$#&'    !##%.  |#@@#&`  |##;  /     /\n          ;##&&#@:     '&#%.`$#@:    |##! .%#%;&#%..%#&'  /     /\n          '&###!      !##!  `$#@:   .%##;'&#! :@#|`%#$`  /     /\n          '&#&'     `$#########@:   `$#&$@#;  ;##$$#|   /     /\n          |##!     ;##$`    '&##:   '&###&'   !####!   /     /\n         ;##%.   .%##|      '&##;   :@##$`    |##@:   /     /\n     ________________________________________________/     /\n   _/_/  O O O O O O O O O O O O O O O O O O    | .|      /\n  (_____________________________________________|__|_____/\n";
 int main(int argc, char *argv[])
 {
 	int is_new_file = 0;
+	
+	printf("%s\n%s\n",opening_line,logo);
 
 	if (argc == 1)
 	{
-		fprintf(1, ">>> \e[1;31mplease input the command as [editor file_name]\n\e[0m");
+		fprintf(1, "YAW-> \e[1;31mplease input the command as [editor file_name]\n\e[0m");
 		exit(0);
 	}
 
@@ -69,7 +73,7 @@ int main(int argc, char *argv[])
 	//如果文件存在，则打开并读取里面的内容
 	if (fd != -1)
 	{
-		// fprintf(1, ">>> \e[1;33mfile exist\n\e[0m");
+		// fprintf(1, "YAW-> \e[1;33mfile exist\n\e[0m");
 		char buf[BUF_SIZE] = {};
 		int len = 0;
 		while ((len = read(fd, buf, BUF_SIZE)) > 0)
@@ -127,8 +131,8 @@ int main(int argc, char *argv[])
 	{
 		if (ins_mode == 0)
 		{
-			// fprintf(1, ">>> \e[1;33mplease input command:\n\e[0m");
-			fprintf(1, ">>> \e[1;33m\e[0m");
+			// fprintf(1, "YAW-> \e[1;33mplease input command:\n\e[0m");
+			fprintf(1, "YAW-> \e[1;33m\e[0m");
 			memset(input, 0, MAX_LINE_LENGTH);
 			gets(input, MAX_LINE_LENGTH);
 			int len = strlen(input);
@@ -165,8 +169,8 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				// fprintf(1, ">>> \033[1m\e[43;31minvalid command.\e[0m\n");
-				fprintf(1, ">>> \033[1m\e[41;33minvalid command.\e[0m\n");
+				// fprintf(1, "YAW-> \033[1m\e[43;31minvalid command.\e[0m\n");
+				fprintf(1, "YAW-> \033[1m\e[41;33minvalid command.\e[0m\n");
 				// com_help(text);
 			}
 		}
@@ -184,7 +188,7 @@ int main(int argc, char *argv[])
 				com_mod(text, line_number + 1, &input[pos], 1);
 			else
 			{
-				fprintf(1, ">>> \033[1m\e[41;33minvalid command.\e[0m\n");
+				fprintf(1, "YAW-> \033[1m\e[41;33minvalid command.\e[0m\n");
 				// com_help(text);
 			}
 		}
@@ -204,19 +208,19 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				fprintf(1, ">>> \033[1m\e[41;33minvalid command.\e[0m\n");
+				fprintf(1, "YAW-> \033[1m\e[41;33minvalid command.\e[0m\n");
 				// com_help(text);
 			}
 		}
 		else if (strcmp(input, "show") == 0)
 		{
 			auto_show = 1;
-			fprintf(1, ">>> \e[1;33menable show current contents after text changed.\n\e[0m");
+			fprintf(1, "YAW-> \e[1;33menable show current contents after text changed.\n\e[0m");
 		}
 		else if (strcmp(input, "hide") == 0)
 		{
 			auto_show = 0;
-			fprintf(1, ">>> \e[1;33mdisable show current contents after text changed.\n\e[0m");
+			fprintf(1, "YAW-> \e[1;33mdisable show current contents after text changed.\n\e[0m");
 		}
 		// rollback
 		else if (strcmp(input, "rb") == 0)
@@ -246,7 +250,7 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			fprintf(1, ">>> \033[1m\e[41;33minvalid command.\e[0m\n");
+			fprintf(1, "YAW-> \033[1m\e[41;33minvalid command.\e[0m\n");
 			// com_help(text);
 		}
 	}
@@ -272,7 +276,7 @@ char *strcat_n(char *dest, char *src, int len)
 
 void show_text(char *text[])
 {
-	fprintf(1, ">>> \033[1m\e[45;33mthe contents of the file are:\e[0m\n");
+	fprintf(1, "YAW-> \033[1m\e[45;33mthe contents of the file are:\e[0m\n");
 	fprintf(1, "\n");
 	int j = 0;
 	for (; text[j] != NULL; j++)
@@ -341,7 +345,7 @@ int com_ins(char *text[], int n, char *extra, int flag)
 {
 	if (n <= 0 || n > get_line_number(text) + 1 + 1)
 	{
-		fprintf(1, ">>> \033[1m\e[41;33minvalid line number\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[41;33minvalid line number\e[0m\n");
 		return 1;
 	}
 	char input[MAX_LINE_LENGTH] = {};
@@ -448,7 +452,7 @@ void com_mod(char *text[], int n, char *extra, int flag)
 {
 	if (n <= 0 || n > get_line_number(text) + 1)
 	{
-		fprintf(1, ">>> \033[1m\e[41;33minvalid line number\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[41;33minvalid line number\e[0m\n");
 		return;
 	}
 	char input[MAX_LINE_LENGTH] = {};
@@ -496,7 +500,7 @@ void com_del(char *text[], int n, int flag)
 	if (n <= 0 || n > get_line_number(text) + 1)
 	{
 		// fprintf(1, "n: %d\n", n);
-		fprintf(1, ">>> \033[1m\e[41;33minvalid line number\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[41;33minvalid line number\e[0m\n");
 		return;
 	}
 
@@ -534,7 +538,7 @@ void com_save(char *text[], char *path)
 	int fd = open(path, 1 | O_CREATE);
 	if (fd == -1)
 	{
-		fprintf(1, ">>> \033[1m\e[41;33msave failed, file can't open:\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[41;33msave failed, file can't open:\e[0m\n");
 		// setProgramStatus(SHELL);
 		exit(0);
 	}
@@ -552,7 +556,7 @@ void com_save(char *text[], char *path)
 		write(fd, text[i], strlen(text[i]));
 	}
 	close(fd);
-	fprintf(1, ">>> \e[1;32msaved successfully\e[0m\n");
+	fprintf(1, "YAW-> \e[1;32msaved successfully\e[0m\n");
 	changed = 0;
 	return;
 }
@@ -562,7 +566,7 @@ void com_exit(char *text[], char *path)
 	//询问是否保存
 	while (changed == 1)
 	{
-		fprintf(1, ">>> \e[1;33msave the file?\e[0m \033[1m\e[46;33my\e[0m/\033[1m\e[41;33mn\e[0m\n");
+		fprintf(1, "YAW-> \e[1;33msave the file?\e[0m \033[1m\e[46;33my\e[0m/\033[1m\e[41;33mn\e[0m\n");
 		char input[MAX_LINE_LENGTH] = {};
 		gets(input, MAX_LINE_LENGTH);
 		input[strlen(input) - 1] = '\0';
@@ -571,7 +575,7 @@ void com_exit(char *text[], char *path)
 		else if (strcmp(input, "n") == 0)
 			break;
 		else
-			fprintf(2, ">>> \e[1;31mwrong answer?\e[0m\n");
+			fprintf(2, "YAW-> \e[1;31mwrong answer?\e[0m\n");
 	}
 	//释放内存
 	int i = 0;
@@ -591,7 +595,7 @@ void com_create_new_file(char *text[], char *path)
 	int fd = open(path, O_WRONLY | O_CREATE);
 	if (fd == -1)
 	{
-		fprintf(1, ">>> \e[1;31mcreate file failed\e[0m\n");
+		fprintf(1, "YAW-> \e[1;31mcreate file failed\e[0m\n");
 		exit(0);
 	}
 }
@@ -669,14 +673,14 @@ void com_init_file(char *text[], char *path)
 // 语法高亮
 void show_text_syntax_highlighting(char *text[])
 {
-	fprintf(1, ">>> \033[1m\e[45;33mthe contents of the file are:\e[0m\n");
+	fprintf(1, "YAW-> \033[1m\e[45;33mthe contents of the file are:\e[0m\n");
 	if (text_mode == 0)
 	{
-		fprintf(1, ">>> \033[1m\e[45;33mshown in text mode:\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[45;33mshown in text mode:\e[0m\n");
 	}
 	else if (text_mode == 1)
 	{
-		fprintf(1, ">>> \033[1m\e[45;33mshown in code mode:\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[45;33mshown in code mode:\e[0m\n");
 	}
 	fprintf(1, "\n");
 	int j = 0;
@@ -977,7 +981,7 @@ void com_rollback(char *text[], int n)
 	// rollback the command
 	if (upper_bound < 0)
 	{
-		fprintf(1, ">>> \033[1m\e[41;33mcouldn't rollback\e[0m\n");
+		fprintf(1, "YAW-> \033[1m\e[41;33mcouldn't rollback\e[0m\n");
 		return;
 	}
 
