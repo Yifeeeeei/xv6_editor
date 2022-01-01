@@ -280,11 +280,6 @@ char* strcat_n(char* dest, char* src, int len)
 	dest[len+pos] = '\0';
 	return dest;
 }
-void com_find(char *extra)
-{
-	strcpy(keyword, extra);
-	return;
-}
 
 
 void show_text(char *text[])
@@ -736,7 +731,7 @@ void show_text_syntax_highlighting(char *text[]){
 					mark++;
 				}
 				//keyword
-                else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strcmp(text[j]+mark,keyword)==0)){
+                else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strncmp(text[j]+mark,keyword,strlen(keyword))==0)){
                     for(int t=0;t<strlen(keyword);t++){
                         fprintf(1, "\e[1;36m%c\e[0m", text[j][mark+t]);
 					}
