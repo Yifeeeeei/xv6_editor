@@ -9,13 +9,14 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
+/* 基本参数属性定义 */
 #define BUF_SIZE 256
 #define MAX_LINE_NUMBER 256
 #define MAX_LINE_LENGTH 256
 #define MAX_ROLLBAKC_STEP 20
 #define NULL 0
 
-// define some color variables	>> By Shaun Fong
+/* 颜色定义，用于彩色文字和高亮显示 */
 #define NONE                 "\e[0m"
 #define BLACK                "\e[0;30m"
 #define L_BLACK              "\e[1;30m"
@@ -34,16 +35,16 @@
 #define GRAY                 "\e[0;37m"
 #define WHITE                "\e[1;37m"
 
-char* strcat_n(char* dest, char* src, int len);
+char* strcat_n(char* dest, char* src, int len);//用于字符串拼接
 int get_line_number(char *text[]);
 void show_text(char *text[]);
-void com_ins(char *text[], int n, char *extra, int flag);
-void com_mod(char *text[], int n, char *extra, int flag);
-void com_del(char *text[], int n, int flag);
-void com_help(char *text[]);
-void com_save(char *text[], char *path);
-void com_exit(char *text[], char *path);
-void com_create_new_file(char *text[], char *path);
+void com_ins(char *text[], int n, char *extra, int flag);//插入命令
+void com_mod(char *text[], int n, char *extra, int flag);//修改命令
+void com_del(char *text[], int n, int flag);//删除命令
+void com_help(char *text[]);//显示帮助
+void com_save(char *text[], char *path);//保存命令
+void com_exit(char *text[], char *path);//退出编辑器
+void com_create_new_file(char *text[], char *path);//
 void com_display_color_demo();
 void com_init_file(char *text[], char *path);
 void show_text_syntax_highlighting(char *text[]);
@@ -53,6 +54,8 @@ int stringtonumber(char* src);
 void number2string(int num, char array[]);
 void com_find(char *text[],char *extra);
 
+
+/*全局变量区*/
 
 //标记是否更改过
 int changed = 0;
@@ -64,6 +67,7 @@ char *command_set[MAX_ROLLBAKC_STEP] = {};
 int upper_bound = -1;
 char keyword[100] = {'\0'};
 int searching = 0;
+int text_mode = 0;//模式：0-正常文字模式；1-代码模式，开启代码高亮
 
 
 int main(int argc, char *argv[])
@@ -678,6 +682,14 @@ void com_init_file(char *text[], char *path){
 // 语法高亮
 void show_text_syntax_highlighting(char *text[]){
 	fprintf(1, ">>> \033[1m\e[45;33mthe contents of the file are:\e[0m\n");
+	if (text_mode == 0)
+	{
+		fprintf(1, ">>> \033[1m\e[45;33mshown in text mode:\e[0m\n");
+	}
+	else if(text_mode == 1)
+	{
+		fprintf(1, ">>> \033[1m\e[45;33mshown in code mode:\e[0m\n");
+	}
 	fprintf(1, "\n");
 	int j = 0;
 	for (; text[j] != NULL; j++){
@@ -712,17 +724,23 @@ void show_text_syntax_highlighting(char *text[]){
 				}
 
 				// numbers
+
 				if(text[j][mark] >= '0' && text[j][mark] <= '9'){
 					fprintf(1, "\033[0;33m%c\033[0m", text[j][mark]);
 					mark++;
 				}
 				//keyword
-                else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strcmp(text[j]+mark,keyword)==0)){
+                 else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strcmp(text[j]+mark,keyword)==0)){
                     for(int t=0;t<strlen(keyword);t++){
                         fprintf(1, "\e[1;36m%c\e[0m", text[j][mark+t]);
 					}
                     mark=mark+strlen(keyword);
                 }
+				else if(text_mode == 0)
+				{
+					continue;
+				}
+				/*在代码模式下需要显示的东西*/
 				// fprintf
 				else if((mark+5)<MAX_LINE_LENGTH && text[j][mark] == 'p' && text[j][mark+1] == 'r' 
 					&& text[j][mark+2] == 'i' && text[j][mark+3] == 'n' && text[j][mark+4] == 't' 
