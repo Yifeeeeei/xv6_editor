@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 		else if (strcmp(input, "help") == 0)
 			com_help(text);
 		// save
-		else if (strcmp(input, "save") == 0 || strcmp(input, "CTRL+S\n") == 0)
+		else if (strcmp(input, "save") == 0 )
 			com_save(text, argv[1]);
 		else if (strcmp(input, "exit") == 0)
 			com_exit(text, argv[1]);
@@ -741,7 +741,7 @@ void show_text_syntax_highlighting(char *text[])
 				/*在代码模式下需要显示的东西*/
 				// fprintf
 				//(text_mode==1)&&
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'p' && text[j][mark + 1] == 'r' && text[j][mark + 2] == 'i' && text[j][mark + 3] == 'n' && text[j][mark + 4] == 't' && text[j][mark + 5] == 'f'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "printf", 6) == 0)))
 				{
 					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 1]);
@@ -752,7 +752,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 6;
 				}
 				// int
-				else if ((text_mode==1)&&((mark + 2) < MAX_LINE_LENGTH && text[j][mark] == 'i' && text[j][mark + 1] == 'n' && text[j][mark + 2] == 't'))
+				else if ((text_mode==1)&&((mark + 2) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "int", 3) == 0)))
 				{
 					// highlighting 'int' string
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
@@ -761,7 +761,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 3;
 				}
 				// float
-				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && text[j][mark] == 'f' && text[j][mark + 1] == 'l' && text[j][mark + 2] == 'o' && text[j][mark + 3] == 'a' && text[j][mark + 4] == 't'))
+				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "float", 5) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -771,7 +771,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 5;
 				}
 				// double
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'd' && text[j][mark + 1] == 'o' && text[j][mark + 2] == 'u' && text[j][mark + 3] == 'b' && text[j][mark + 4] == 'l' && text[j][mark + 5] == 'e'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "double", 6) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -782,7 +782,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 6;
 				}
 				// char
-				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && text[j][mark] == 'c' && text[j][mark + 1] == 'h' && text[j][mark + 2] == 'a' && text[j][mark + 3] == 'r'))
+				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "char", 4) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -791,14 +791,14 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 4;
 				}
 				// if
-				else if ((text_mode==1)&&((mark + 1) < MAX_LINE_LENGTH && text[j][mark] == 'i' && text[j][mark + 1] == 'f'))
+				else if ((text_mode==1)&&((mark + 1) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "if", 2) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
 					mark = mark + 2;
 				}
 				// else
-				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && text[j][mark] == 'e' && text[j][mark + 1] == 'l' && text[j][mark + 2] == 's' && text[j][mark + 3] == 'e'))
+				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "else", 4) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
@@ -807,7 +807,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 4;
 				}
 				// else if
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'e' && text[j][mark + 1] == 'l' && text[j][mark + 2] == 's' && text[j][mark + 3] == 'e' && text[j][mark + 4] == ' ' && text[j][mark + 5] == 'i' && text[j][mark + 6] == 'f'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "else if", 7) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
@@ -819,7 +819,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 7;
 				}
 				// for
-				else if ((text_mode==1)&&((mark + 2) < MAX_LINE_LENGTH && text[j][mark] == 'f' && text[j][mark + 1] == 'o' && text[j][mark + 2] == 'r'))
+				else if ((text_mode==1)&&((mark + 2) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "for", 3) == 0)))
 				{
 					// highlighting 'int' string
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
@@ -828,7 +828,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 3;
 				}
 				// while
-				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && text[j][mark] == 'w' && text[j][mark + 1] == 'h' && text[j][mark + 2] == 'i' && text[j][mark + 3] == 'l' && text[j][mark + 4] == 'e'))
+				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "while", 5) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
@@ -838,7 +838,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 5;
 				}
 				// long
-				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && text[j][mark] == 'l' && text[j][mark + 1] == 'o' && text[j][mark + 2] == 'n' && text[j][mark + 3] == 'g'))
+				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "long", 4) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -853,7 +853,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark++;
 				}
 				// static
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 's' && text[j][mark + 1] == 't' && text[j][mark + 2] == 'a' && text[j][mark + 3] == 't' && text[j][mark + 4] == 'i' && text[j][mark + 5] == 'c'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "static", 6) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -864,7 +864,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 6;
 				}
 				// const
-				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && text[j][mark] == 'c' && text[j][mark + 1] == 'o' && text[j][mark + 2] == 'n' && text[j][mark + 3] == 's' && text[j][mark + 4] == 't'))
+				else if ((text_mode==1)&&((mark + 4) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "const", 5) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
@@ -873,19 +873,8 @@ void show_text_syntax_highlighting(char *text[])
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 4]);
 					mark = mark + 5;
 				}
-				// memset
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'm' && text[j][mark + 1] == 'e' && text[j][mark + 2] == 'm' && text[j][mark + 3] == 's' && text[j][mark + 4] == 'e' && text[j][mark + 5] == 't'))
-				{
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark]);
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 1]);
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 2]);
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 3]);
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 4]);
-					fprintf(1, "\e[1;36m%c\e[0m", text[j][mark + 5]);
-					mark = mark + 6;
-				}
 				// //
-				else if ((text_mode==1)&&((mark + 1) < MAX_LINE_LENGTH && text[j][mark] == '/' && text[j][mark] == '/'))
+				else if ((text_mode==1)&&((mark + 1) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "//", 2) == 0)))
 				{
 					fprintf(1, "\e[1;32m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;32m%c\e[0m", text[j][mark + 1]);
@@ -893,7 +882,7 @@ void show_text_syntax_highlighting(char *text[])
 					flag_annotation = 1;
 				}
 				// NULL
-				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && text[j][mark] == 'N' && text[j][mark + 1] == 'U' && text[j][mark + 2] == 'L' && text[j][mark + 3] == 'L'))
+				else if ((text_mode==1)&&((mark + 3) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "NULL", 4) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
@@ -948,7 +937,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = end + 1;
 				}
 				// continue
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'c' && text[j][mark + 1] == 'o' && text[j][mark + 2] == 'n' && text[j][mark + 3] == 't' && text[j][mark + 4] == 'i' && text[j][mark + 5] == 'n' && text[j][mark + 6] == 'u' && text[j][mark + 7] == 'e'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "continue", 7) == 0)))
 				{
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;35m%c\e[0m", text[j][mark + 1]);
@@ -961,7 +950,7 @@ void show_text_syntax_highlighting(char *text[])
 					mark = mark + 8;
 				}
 				// return
-				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && text[j][mark] == 'r' && text[j][mark + 1] == 'e' && text[j][mark + 2] == 't' && text[j][mark + 3] == 'u' && text[j][mark + 4] == 'r' && text[j][mark + 5] == 'n'))
+				else if ((text_mode==1)&&((mark + 5) < MAX_LINE_LENGTH && (strncmp(text[j] + mark, "return", 6) == 0)))
 				{
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark]);
 					fprintf(1, "\e[1;34m%c\e[0m", text[j][mark + 1]);
