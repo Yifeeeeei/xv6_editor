@@ -51,7 +51,7 @@ void com_rollback(char *text[], int n);
 void record_command(char *command);
 int stringtonumber(char* src);
 void number2string(int num, char array[]);
-void com_find(char *extra);
+void com_find(char *text[],char *extra);
 
 
 //标记是否更改过
@@ -188,8 +188,7 @@ int main(int argc, char *argv[])
 		//find
 		else if(input[0] == 'f' && input[1] == 'i' && input[2] == 'n' && input[3] == 'd')
 		{
-			com_find(&input[5]);
-			printf("%s",keyword);
+			com_find(text,&input[5]);
 		}
 		//mod
 		else if (input[0] == 'm' && input[1] == 'o' && input[2] == 'd')
@@ -430,6 +429,14 @@ int com_ins(char *text[], int n, char *extra, int flag)
 		show_text_syntax_highlighting(text);
 
 	return 1;
+}
+
+void com_find(char *text[],char *extra)
+{
+	strcpy(keyword, extra);
+    searching=1;
+    if (auto_show == 1)
+		show_text_syntax_highlighting(text);
 }
 
 //修改命令，n为用户输入的行号，从1开始
@@ -728,6 +735,13 @@ void show_text_syntax_highlighting(char *text[]){
 					fprintf(1, "\033[0;33m%c\033[0m", text[j][mark]);
 					mark++;
 				}
+				//keyword
+                else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strcmp(text[j]+mark,keyword)==0)){
+                    for(int t=0;t<strlen(keyword);t++){
+                        fprintf(1, "\e[1;36m%c\e[0m", text[j][mark+t]);
+					}
+                    mark=mark+strlen(keyword);
+                }
 				// fprintf
 				else if((mark+5)<MAX_LINE_LENGTH && text[j][mark] == 'p' && text[j][mark+1] == 'r' 
 					&& text[j][mark+2] == 'i' && text[j][mark+3] == 'n' && text[j][mark+4] == 't' 
