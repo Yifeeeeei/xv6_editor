@@ -586,22 +586,22 @@ void com_create_new_file(char *text[], char *path){
 void com_display_color_demo(){
 	fprintf(1, ">>> \e[1;33mcolor demo:\n\e[0m");
 	fprintf(1, "----------------+-------------------------------+-----------------------\n");
-	fprintf(1, "L_BLACK: 	| \e[1;30mI am happy Shaun Fong.\e[0m	|	\e[1;30m\\e[1;30m\e[0m\n");
-	fprintf(1, "BLACK: 		| \e[0;30mI am happy Shaun Fong.\e[0m	|	\e[0;30m\\e[0;30m\e[0m\n");
-	fprintf(1, "RED: 		| \e[0;31mI am happy Shaun Fong.\e[0m	|	\e[0;31m\\e[0;31m\e[0m\n");
-	fprintf(1, "L_RED: 		| \e[1;31mI am happy Shaun Fong.\e[0m	|	\e[1;31m\\e[1;31m\e[0m\n");
-	fprintf(1, "GREEN: 		| \e[0;32mI am happy Shaun Fong.\e[0m	|	\e[0;32m\\e[0;32m\e[0m\n");
-	fprintf(1, "L_GREEN: 	| \e[1;32mI am happy Shaun Fong.\e[0m	|	\e[1;32m\\e[1;32m\e[0m\n");
-	fprintf(1, "YELLOW:		| \e[0;33mI am happy Shaun Fong. \e[0m	|	\e[0;33m\\e[0;33m\e[0m\n");
-	fprintf(1, "L_YELLOW:	| \e[1;33mI am happy Shaun Fong. \e[0m	|	\e[1;33m\\e[1;33m\e[0m\n");
-	fprintf(1, "BLUE: 		| \e[0;34mI am happy Shaun Fong. \e[0m	|	\e[0;34m\\e[0;34m\e[0m\n");
-	fprintf(1, "L_BLUE:		| \e[1;34mI am happy Shaun Fong. \e[0m	|	\e[1;34m\\e[1;34m\e[0m\n");
-	fprintf(1, "PURPLE:		| \e[0;35mI am happy Shaun Fong. \e[0m	|	\e[0;35m\\e[0;35m\e[0m\n");
-	fprintf(1, "L_PURPLE: 	| \e[1;35mI am happy Shaun Fong. \e[0m	|	\e[1;35m\\e[1;35m\e[0m\n");
-	fprintf(1, "CYAN: 		| \e[0;36mI am happy Shaun Fong. \e[0m	|	\e[0;36m\\e[0;36m\e[0m\n");
-	fprintf(1, "L_CYAN:		| \e[1;36mI am happy Shaun Fong. \e[0m	|	\e[1;36m\\e[1;36m\e[0m\n");
-	fprintf(1, "GRAY: 		| \e[0;37mI am happy Shaun Fong. \e[0m	|	\e[0;37m\\e[0;37m\e[0m\n");
-	fprintf(1, "WHITE: 		| \e[1;37mI am happy Shaun Fong. \e[0m	|	\e[1;37m\\e[1;37m\e[0m\n");
+	fprintf(1, "L_BLACK: 	| \e[1;30mThis is an text editor for xv6.\e[0m	|	\e[1;30m\\e[1;30m\e[0m\n");
+	fprintf(1, "BLACK: 		| \e[0;30mThis is an text editor for xv6.\e[0m	|	\e[0;30m\\e[0;30m\e[0m\n");
+	fprintf(1, "RED: 		| \e[0;31mThis is an text editor for xv6.\e[0m	|	\e[0;31m\\e[0;31m\e[0m\n");
+	fprintf(1, "L_RED: 		| \e[1;31mThis is an text editor for xv6.\e[0m	|	\e[1;31m\\e[1;31m\e[0m\n");
+	fprintf(1, "GREEN: 		| \e[0;32mThis is an text editor for xv6.\e[0m	|	\e[0;32m\\e[0;32m\e[0m\n");
+	fprintf(1, "L_GREEN: 	| \e[1;32mThis is an text editor for xv6.\e[0m	|	\e[1;32m\\e[1;32m\e[0m\n");
+	fprintf(1, "YELLOW:		| \e[0;33mThis is an text editor for xv6.\e[0m	|	\e[0;33m\\e[0;33m\e[0m\n");
+	fprintf(1, "L_YELLOW:	| \e[1;33mThis is an text editor for xv6.\e[0m	|	\e[1;33m\\e[1;33m\e[0m\n");
+	fprintf(1, "BLUE: 		| \e[0;34mThis is an text editor for xv6.\e[0m	|	\e[0;34m\\e[0;34m\e[0m\n");
+	fprintf(1, "L_BLUE:		| \e[1;34mThis is an text editor for xv6.\e[0m	|	\e[1;34m\\e[1;34m\e[0m\n");
+	fprintf(1, "PURPLE:		| \e[0;35mThis is an text editor for xv6.\e[0m	|	\e[0;35m\\e[0;35m\e[0m\n");
+	fprintf(1, "L_PURPLE: 	| \e[1;35mThis is an text editor for xv6.\e[0m	|	\e[1;35m\\e[1;35m\e[0m\n");
+	fprintf(1, "CYAN: 		| \e[0;36mThis is an text editor for xv6.\e[0m	|	\e[0;36m\\e[0;36m\e[0m\n");
+	fprintf(1, "L_CYAN:		| \e[1;36mThis is an text editor for xv6.\e[0m	|	\e[1;36m\\e[1;36m\e[0m\n");
+	fprintf(1, "GRAY: 		| \e[0;37mThis is an text editor for xv6.\e[0m	|	\e[0;37m\\e[0;37m\e[0m\n");
+	fprintf(1, "WHITE: 		| \e[1;37mThis is an text editor for xv6.\e[0m	|	\e[1;37m\\e[1;37m\e[0m\n");
 	fprintf(1, "----------------+-------------------------------+-----------------------\n");
 }
 
@@ -617,6 +617,7 @@ void com_help(char *text[])
 	fprintf(1, "\e[1;32mdel:\e[0m 	| delete the last line\n");
 	fprintf(1, "\e[1;32mshow:\e[0m 	| enable show current contents after executing a command.\n");
 	fprintf(1, "\e[1;32mhide:\e[0m 	| disable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;32mfind [keyword]:\e[0m 	| highlight given keyword n\n");
 	fprintf(1, "\e[1;32msave:\e[0m 	| save the file\n");
 	fprintf(1, "\e[1;32mexit:\e[0m 	| exit editor\n");
 	fprintf(1, "\e[1;32mhelp:\e[0m	| help info\n");
