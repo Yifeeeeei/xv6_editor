@@ -613,21 +613,21 @@ void com_create_new_file(char *text[], char *path)
 void com_help(char *text[])
 {
 	fprintf(1, "\e[1;32mhelp information:\n\e[0m");
-	fprintf(1, "\e[1;33mhelp:\e[0m	    | help information\n");
-	fprintf(1, "\e[1;30mwrite:\e[0m 	| write any lines after last line,input \":exit\" to exit write mode\n");
-	fprintf(1, "\e[1;31mwrite-n:\e[0m 	| write a line after line n\n");
-	fprintf(1, "\e[1;32mmodify:\e[0m 	| modify the last line\n");
-	fprintf(1, "\e[1;33mmodify-n:\e[0m 	| modify nth line \n");
-	fprintf(1, "\e[1;34mdelete:\e[0m 	| delete the last line\n");
-	fprintf(1, "\e[1;35mdelete-n:\e[0m 	| delete nth line \n");
-	fprintf(1, "\e[1;36mfind:\e[0m     	| find keyword\n");
-	fprintf(1, "\e[1;37mshow:\e[0m 	    | enable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;30mhide:\e[0m 	    | disable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;31mrollback:\e[0m	| rollback the file\n");
-	fprintf(1, "\e[1;32mdisplay:\e[0m	| display current file\n");
-	fprintf(1, "\e[1;33msave:\e[0m 	    | save the file\n");
-	fprintf(1, "\e[1;32mcm:\e[0m     	| show/hide code syntaxing\n");
-	fprintf(1, "\e[1;34mexit:\e[0m 	    | exit editor\n");
+	fprintf(1, "\e[1;33mhelp:\e[0m      | help information\n");
+	fprintf(1, "\e[1;30mwrite:\e[0m     | write any lines after last line,input \":exit\" to exit write mode\n");
+	fprintf(1, "\e[1;31mwrite-n:\e[0m   | write a line after line n\n");
+	fprintf(1, "\e[1;32mmodify:\e[0m    | modify the last line\n");
+	fprintf(1, "\e[1;33mmodify-n:\e[0m  | modify nth line \n");
+	fprintf(1, "\e[1;34mdelete:\e[0m    | delete the last line\n");
+	fprintf(1, "\e[1;35mdelete-n:\e[0m  | delete nth line \n");
+	fprintf(1, "\e[1;36mfind:\e[0m      | find keyword\n");
+	fprintf(1, "\e[1;37mshow:\e[0m      | enable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;30mhide:\e[0m      | disable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;31mrollback:\e[0m  | rollback the file\n");
+	fprintf(1, "\e[1;32mdisplay:\e[0m   | display current file\n");
+	fprintf(1, "\e[1;33msave:\e[0m      | save the file\n");
+	fprintf(1, "\e[1;32mcm:\e[0m        | show/hide code syntaxing\n");
+	fprintf(1, "\e[1;34mexit:\e[0m      | exit editor\n");
 }
 
 // 预留数据
