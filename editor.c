@@ -37,7 +37,7 @@
 char* strcat_n(char* dest, char* src, int len);
 int get_line_number(char *text[]);
 void show_text(char *text[]);
-int com_ins(char *text[], int n, char *extra, int flag);
+void com_ins(char *text[], int n, char *extra, int flag);
 void com_mod(char *text[], int n, char *extra, int flag);
 void com_del(char *text[], int n, int flag);
 void com_help(char *text[]);
@@ -51,7 +51,7 @@ void com_rollback(char *text[], int n);
 void record_command(char *command);
 int stringtonumber(char* src);
 void number2string(int num, char array[]);
-void com_find(char *extra);
+void com_find(char *text[],char *extra);
 
 
 //标记是否更改过
@@ -133,24 +133,18 @@ int main(int argc, char *argv[])
 	}
 	//输出帮助
 	//com_help(text);
-
-	int ins_mode = 0;
 	
 	//处理命令
 	char input[MAX_LINE_LENGTH] = {};
 	while (1)
 	{
-		if (ins_mode == 0)
-		{
-			//fprintf(1, ">>> \e[1;33mplease input command:\n\e[0m");
-			fprintf(1, ">>> \e[1;33m\e[0m");
-			memset(input, 0, MAX_LINE_LENGTH);
-			gets(input, MAX_LINE_LENGTH);
-			int len = strlen(input);
-			input[len-1] = '\0';
-			len --;
-		}
-		
+		//fprintf(1, ">>> \e[1;33mplease input command:\n\e[0m");
+		fprintf(1, ">>> \e[1;33m\e[0m");
+		memset(input, 0, MAX_LINE_LENGTH);
+		gets(input, MAX_LINE_LENGTH);
+		int len = strlen(input);
+		input[len-1] = '\0';
+		len --;
 		//寻找命令中第一个空格
 		int pos = MAX_LINE_LENGTH - 1;
 		int j = 0;
@@ -173,10 +167,8 @@ int main(int argc, char *argv[])
 			}
 			else if(input[3] == ' '||input[3] == '\0')
 			{
-				ins_mode = com_ins(text, line_number+1+1, &input[pos], 1);
-				printf("ins_mode: %d\n", ins_mode);
-				if (ins_mode != 0)
-                	line_number = get_line_number(text);
+				com_ins(text, line_number+1+1, &input[pos], 1);
+                                line_number = get_line_number(text);
 			}
 			else
 			{
@@ -188,8 +180,7 @@ int main(int argc, char *argv[])
 		//find
 		else if(input[0] == 'f' && input[1] == 'i' && input[2] == 'n' && input[3] == 'd')
 		{
-			com_find(&input[5]);
-			printf("%s",keyword);
+			com_find(text,&input[5]);
 		}
 		//mod
 		else if (input[0] == 'm' && input[1] == 'o' && input[2] == 'd')
@@ -281,11 +272,6 @@ char* strcat_n(char* dest, char* src, int len)
 	dest[len+pos] = '\0';
 	return dest;
 }
-void com_find(char *extra)
-{
-	strcpy(keyword, extra);
-	return;
-}
 
 
 void show_text(char *text[])
@@ -348,12 +334,12 @@ void number2string(int num, char array[]) {
 
 //插入命令，n为用户输入的行号，从1开始
 //extra:输入命令时接着的信息，代表待插入的文本
-int com_ins(char *text[], int n, char *extra, int flag)
+void com_ins(char *text[], int n, char *extra, int flag)
 {
 	if (n <= 0 || n > get_line_number(text) + 1 + 1)
 	{
 		fprintf(1, ">>> \033[1m\e[41;33minvalid line number\e[0m\n");
-		return 1;
+		return;
 	}
 	char input[MAX_LINE_LENGTH] = {};
 	if (*extra == '\0')
@@ -364,12 +350,6 @@ int com_ins(char *text[], int n, char *extra, int flag)
 	}
 	else
 		strcpy(input, extra);
-
-	char exit[5]
-	if (strcmp(input, ":exit") == 0)
-	{
-		return 0;
-	}
 	
 	char *part4 = malloc(MAX_LINE_LENGTH); 
 	if(flag){
@@ -405,7 +385,7 @@ int com_ins(char *text[], int n, char *extra, int flag)
 			changed = 1;
 			if (auto_show == 1)
 				show_text_syntax_highlighting(text);
-			return 1;
+			return;
 		}
 	}
 	memset(text[n-1], 0, MAX_LINE_LENGTH);
@@ -428,9 +408,16 @@ int com_ins(char *text[], int n, char *extra, int flag)
 
 	if (auto_show == 1)
 		show_text_syntax_highlighting(text);
-
-	return 1;
 }
+
+void com_find(char *text[],char *extra)
+{
+	strcpy(keyword, extra);
+    searching=1;
+    if (auto_show == 1)
+		show_text_syntax_highlighting(text);
+}
+
 
 //修改命令，n为用户输入的行号，从1开始
 //extra:输入命令时接着的信息，代表待修改成的文本
@@ -728,6 +715,13 @@ void show_text_syntax_highlighting(char *text[]){
 					fprintf(1, "\033[0;33m%c\033[0m", text[j][mark]);
 					mark++;
 				}
+				//keyword
+                else if((mark+strlen(keyword))<MAX_LINE_LENGTH && searching && (strcmp(text[j]+mark,keyword)==0)){
+                    for(int t=0;t<strlen(keyword);t++){
+                        fprintf(1, "\e[1;36m%c\e[0m", text[j][mark+t]);
+					}
+                    mark=mark+strlen(keyword);
+                }
 				// fprintf
 				else if((mark+5)<MAX_LINE_LENGTH && text[j][mark] == 'p' && text[j][mark+1] == 'r' 
 					&& text[j][mark+2] == 'i' && text[j][mark+3] == 'n' && text[j][mark+4] == 't' 
