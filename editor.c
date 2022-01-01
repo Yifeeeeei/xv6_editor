@@ -26,7 +26,6 @@ void com_help(char *text[]);							  //显示帮助
 void com_save(char *text[], char *path);				  //保存命令
 void com_exit(char *text[], char *path);				  //退出编辑器
 void com_create_new_file(char *text[], char *path);		  //
-void com_display_color_demo();
 void com_init_file(char *text[], char *path);
 void show_text_syntax_highlighting(char *text[]);
 void com_rollback(char *text[], int n);
@@ -235,8 +234,6 @@ int main(int argc, char *argv[])
 		{
 			com_changemode();
 		}
-		else if (strcmp(input, "demo") == 0)
-			com_display_color_demo();
 		else if (strcmp(input, "init") == 0)
 			com_init_file(text, argv[1]);
 		else if (strcmp(input, "disp") == 0)
