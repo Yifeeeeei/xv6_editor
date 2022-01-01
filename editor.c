@@ -16,25 +16,6 @@
 #define MAX_ROLLBAKC_STEP 20
 #define NULL 0
 
-/* 颜色定义，用于彩色文字和高亮显示 */
-#define NONE "\e[0m"
-#define BLACK "\e[0;30m"
-#define L_BLACK "\e[1;30m"
-#define RED "\e[0;31m"
-#define L_RED "\e[1;31m"
-#define GREEN "\e[0;32m"
-#define L_GREEN "\e[1;32m"
-#define YELLOW "\e[0;33m"
-#define L_YELLOW "\e[1;33m"
-#define BLUE "\e[0;34m"
-#define L_BLUE "\e[1;34m"
-#define PURPLE "\e[0;35m"
-#define L_PURPLE "\e[1;35m"
-#define CYAN "\e[0;36m"
-#define L_CYAN "\e[1;36m"
-#define GRAY "\e[0;37m"
-#define WHITE "\e[1;37m"
-
 char *strcat_n(char *dest, char *src, int len); //用于字符串拼接
 int get_line_number(char *text[]);
 void show_text(char *text[]);
@@ -543,21 +524,6 @@ void com_del(char *text[], int n, int flag)
 	changed = 1;
 
 	// 有bug，实在解决不了，所以del不提供撤回功能
-	if (0)
-	{ // 非rollback调用才记录
-		char part1[] = "del-";
-		char part2[10];
-		number2string(n, part2);
-		char part3[] = " \0";
-		strcat_n(part1, part2, strlen(part2));
-		strcat_n(part1, part3, strlen(part3));
-		// 没有part5做中介，会优化出bug，还不是很懂
-		char *part5 = malloc(MAX_LINE_LENGTH);
-		memset(part5, 0, MAX_LINE_LENGTH);
-		strcat_n(part5, part1, strlen(part1));
-		strcat_n(part5, part4, strlen(part4));
-		record_command(part5);
-	}
 
 	if (auto_show == 1)
 		show_text_syntax_highlighting(text);
@@ -633,51 +599,25 @@ void com_create_new_file(char *text[], char *path)
 	}
 }
 
-// 输出颜色demo
-void com_display_color_demo()
-{
-	fprintf(1, ">>> \e[1;33mcolor demo:\n\e[0m");
-	fprintf(1, "----------------+-------------------------------+-----------------------\n");
-	fprintf(1, "L_BLACK: 	| \e[1;30mI am happy Shaun Fong.\e[0m	|	\e[1;30m\\e[1;30m\e[0m\n");
-	fprintf(1, "BLACK: 		| \e[0;30mI am happy Shaun Fong.\e[0m	|	\e[0;30m\\e[0;30m\e[0m\n");
-	fprintf(1, "RED: 		| \e[0;31mI am happy Shaun Fong.\e[0m	|	\e[0;31m\\e[0;31m\e[0m\n");
-	fprintf(1, "L_RED: 		| \e[1;31mI am happy Shaun Fong.\e[0m	|	\e[1;31m\\e[1;31m\e[0m\n");
-	fprintf(1, "GREEN: 		| \e[0;32mI am happy Shaun Fong.\e[0m	|	\e[0;32m\\e[0;32m\e[0m\n");
-	fprintf(1, "L_GREEN: 	| \e[1;32mI am happy Shaun Fong.\e[0m	|	\e[1;32m\\e[1;32m\e[0m\n");
-	fprintf(1, "YELLOW:		| \e[0;33mI am happy Shaun Fong. \e[0m	|	\e[0;33m\\e[0;33m\e[0m\n");
-	fprintf(1, "L_YELLOW:	| \e[1;33mI am happy Shaun Fong. \e[0m	|	\e[1;33m\\e[1;33m\e[0m\n");
-	fprintf(1, "BLUE: 		| \e[0;34mI am happy Shaun Fong. \e[0m	|	\e[0;34m\\e[0;34m\e[0m\n");
-	fprintf(1, "L_BLUE:		| \e[1;34mI am happy Shaun Fong. \e[0m	|	\e[1;34m\\e[1;34m\e[0m\n");
-	fprintf(1, "PURPLE:		| \e[0;35mI am happy Shaun Fong. \e[0m	|	\e[0;35m\\e[0;35m\e[0m\n");
-	fprintf(1, "L_PURPLE: 	| \e[1;35mI am happy Shaun Fong. \e[0m	|	\e[1;35m\\e[1;35m\e[0m\n");
-	fprintf(1, "CYAN: 		| \e[0;36mI am happy Shaun Fong. \e[0m	|	\e[0;36m\\e[0;36m\e[0m\n");
-	fprintf(1, "L_CYAN:		| \e[1;36mI am happy Shaun Fong. \e[0m	|	\e[1;36m\\e[1;36m\e[0m\n");
-	fprintf(1, "GRAY: 		| \e[0;37mI am happy Shaun Fong. \e[0m	|	\e[0;37m\\e[0;37m\e[0m\n");
-	fprintf(1, "WHITE: 		| \e[1;37mI am happy Shaun Fong. \e[0m	|	\e[1;37m\\e[1;37m\e[0m\n");
-	fprintf(1, "----------------+-------------------------------+-----------------------\n");
-}
-
 void com_help(char *text[])
 {
-	fprintf(1, ">>> \e[1;33minstructions for use:\n\e[0m");
-	fprintf(1, "--------+--------------------------------------------------------------\n");
-	fprintf(1, "\e[1;32mins-n:\e[0m 	| insert a line after line n\n");
-	fprintf(1, "\e[1;32mmod-n:\e[0m 	| modify line n\n");
-	fprintf(1, "\e[1;32mdel-n:\e[0m 	| delete line n\n");
-	fprintf(1, "\e[1;32mins:\e[0m 	| insert a line after the last line\n");
+	fprintf(1, "\e[1;32mhelp information:\n\e[0m");
+	fprintf(1, "\e[1;33mhelp:\e[0m	| help information\n");
+	fprintf(1, "\e[1;30mins:\e[0m 	| insert any lines after last line,input \":exit\" to exit ins mode\n");
+	fprintf(1, "\e[1;31mins-n:\e[0m 	| insert a line after line n\n");
 	fprintf(1, "\e[1;32mmod:\e[0m 	| modify the last line\n");
-	fprintf(1, "\e[1;32mdel:\e[0m 	| delete the last line\n");
-	fprintf(1, "\e[1;32mshow:\e[0m 	| enable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;32mhide:\e[0m 	| disable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;33mmod-n:\e[0m 	| modify nth line \n");
+	fprintf(1, "\e[1;34mdel:\e[0m 	| delete the last line\n");
+	fprintf(1, "\e[1;35mdel-n:\e[0m 	| delete nth line \n");
+	fprintf(1, "\e[1;36mfind:\e[0m 	| find keyword\n");
+	fprintf(1, "\e[1;37mshow:\e[0m 	| enable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;30mhide:\e[0m 	| disable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;31mrb:\e[0m	| rollback the file\n");
+	fprintf(1, "\e[1;32mdisp:\e[0m	| display current file\n");
+	fprintf(1, "\e[1;33msave:\e[0m 	| save the file\n");
 	fprintf(1, "\e[1;32mcm:\e[0m	| show/hide code syntaxing\n");
-	fprintf(1, "\e[1;32msave:\e[0m 	| save the file\n");
-	fprintf(1, "\e[1;32mexit:\e[0m 	| exit editor\n");
-	fprintf(1, "\e[1;32mhelp:\e[0m	| help info\n");
-	fprintf(1, "\e[1;32mdemo:\e[0m	| color demo\n");
-	fprintf(1, "\e[1;32minit:\e[0m	| initial file\n");
-	fprintf(1, "\e[1;32mdisp:\e[0m	| display with highlighting\n");
-	fprintf(1, "\e[1;32mrb:\e[0m	| rollback the file\n");
-	fprintf(1, "--------+--------------------------------------------------------------\n");
+	fprintf(1, "\e[1;34mexit:\e[0m 	| exit editor\n");
+
 }
 
 // 预留数据
