@@ -664,7 +664,7 @@ void com_init_file(char *text[], char *path)
 	strcpy(buf[23], "		continue;");
 	strcpy(buf[24], "	}");
 	strcpy(buf[25], "}");
-	strcpy(buf[26], "// demo | made by Shaun Fong");
+
 
 	// 将数据覆盖进text的空间中
 	for (int i = 0; i <= 26; i++)
