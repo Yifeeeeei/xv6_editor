@@ -26,10 +26,7 @@ void com_help(char *text[]);								 //显示帮助
 void com_save(char *text[], char *path);					 //保存命令
 void com_exit(char *text[], char *path);					 //退出编辑器
 void com_create_new_file(char *text[], char *path);			 //
-void com_init_file(char *text[], char *path);
 void show_text_syntax_highlighting(char *text[]);
-void com_rollback(char *text[], int n);
-void record_command(char *command);
 int stringtonumber(char *src);
 void number2string(int num, char array[]);
 void com_find(char *text[], char *extra);
@@ -233,10 +230,6 @@ int main(int argc, char *argv[])
 			fprintf(1, "YAW-> \e[1;33mdisable show current contents after text changed.\n\e[0m");
 		}
 		// rollback
-		else if (strcmp(input, "rollback") == 0)
-		{
-			com_rollback(text, 1);
-		}
 		else if (strcmp(input, "help") == 0)
 			com_help(text);
 		// save
@@ -248,8 +241,6 @@ int main(int argc, char *argv[])
 		{
 			com_changemode();
 		}
-		else if (strcmp(input, "init") == 0)
-			com_init_file(text, argv[1]);
 		else if (strcmp(input, "display") == 0)
 		{
 			show_text_syntax_highlighting(text);
@@ -415,21 +406,6 @@ int com_write(char *text[], int n, char *extra, int flag)
 	strcpy(text[n - 1], input);
 	changed = 1;
 
-	if (flag)
-	{ // 非rollback的调用时才记录命令
-		// record the command into command_set
-		char *command = malloc(MAX_LINE_LENGTH);
-		char part1[] = "write-";
-		char part2[10];
-		number2string(n, part2);
-		char part3[] = " \0";
-		strcat_n(part1, part2, strlen(part2));
-		strcat_n(part1, part3, strlen(part3));
-		strcat_n(part1, part4, strlen(part4));
-		strcpy(command, part1);
-		record_command(command);
-	}
-
 	if (auto_show == 1)
 		show_text_syntax_highlighting(text);
 
@@ -484,21 +460,6 @@ void com_modify(char *text[], int n, char *extra, int flag)
 	memset(text[n - 1], 0, MAX_LINE_LENGTH);
 	strcpy(text[n - 1], input);
 	changed = 1;
-
-	if (flag)
-	{ // 非rollback调用才记录
-		// record the command into command_set
-		char *command = malloc(MAX_LINE_LENGTH);
-		char part1[] = "modify-";
-		char part2[10];
-		number2string(n, part2);
-		char part3[] = " \0";
-		strcat_n(part1, part2, strlen(part2));
-		strcat_n(part1, part3, strlen(part3));
-		strcat_n(part1, part4, strlen(part4));
-		strcpy(command, part1);
-		record_command(command);
-	}
 
 	if (auto_show == 1)
 		show_text_syntax_highlighting(text);
@@ -623,61 +584,10 @@ void com_help(char *text[])
 	fprintf(1, "\e[1;36mfind keyword\e[0m| find keyword\n");
 	fprintf(1, "\e[1;37mshow\e[0m        | enable show current contents after executing a command.\n");
 	fprintf(1, "\e[1;30mhide\e[0m        | disable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;31mrollback\e[0m    | rollback the file\n");
-	fprintf(1, "\e[1;32mdisplay\e[0m     | display current file\n");
-	fprintf(1, "\e[1;33msave\e[0m        | save the file\n");
-	fprintf(1, "\e[1;32mchangemode\e[0m  | show/hide code syntaxing\n");
+	fprintf(1, "\e[1;31mdisplay\e[0m     | display current file\n");
+	fprintf(1, "\e[1;32msave\e[0m        | save the file\n");
+	fprintf(1, "\e[1;33mchangemode\e[0m  | show/hide code syntaxing\n");
 	fprintf(1, "\e[1;34mexit\e[0m        | exit editor\n");
-}
-
-// 预留数据
-void com_init_file(char *text[], char *path)
-{
-	char *buf[MAX_LINE_NUMBER] = {};
-	for (int i = 0; i < MAX_LINE_NUMBER; i++)
-	{
-		buf[i] = malloc(MAX_LINE_LENGTH);
-	}
-	strcpy(buf[0], "// Create a NULL-terminated string by reading the provided file");
-	strcpy(buf[1], "static char* readShaderSource(const char* shaderFile)");
-	strcpy(buf[2], "{");
-	strcpy(buf[3], "	int flag = 24;");
-	strcpy(buf[4], "	double ways = 100.43;");
-	strcpy(buf[5], "	if ( fp == NULL ) {");
-	strcpy(buf[6], "		return NULL;");
-	strcpy(buf[7], "	}");
-	strcpy(buf[8], "	fseek(fp, 0L, SEEK_END);	//search something");
-	strcpy(buf[9], "	long size = ftell(fp);");
-	strcpy(buf[10], "	fseek(fp, 0L, SEEK_SET);");
-	strcpy(buf[11], "	char* buf = new char[size + 1];");
-	strcpy(buf[12], "	memset(buf, 0, size + 1);	//Initiate every bit of buf as 0");
-	strcpy(buf[13], "	fread(buf, 1, size, fp);");
-	strcpy(buf[14], "	buf[size] = '\\0';");
-	strcpy(buf[15], "	fclose(fp);			// close 'fp' stream.");
-	strcpy(buf[16], "	return buf;");
-	strcpy(buf[17], "	while (flag != 0){");
-	strcpy(buf[18], "		ways = ways + ways * 12;");
-	strcpy(buf[19], "	}");
-	strcpy(buf[20], "	for (int a = 10; a >= 0; a--){");
-	strcpy(buf[21], "		float tmp_value = 20.5;");
-	strcpy(buf[22], "		fprintf(\"the real value of variable tmp_value is:%f\", tmp_value);");
-	strcpy(buf[23], "		continue;");
-	strcpy(buf[24], "	}");
-	strcpy(buf[25], "}");
-	strcpy(buf[26], "// demo | made by Shaun Fong");
-
-	// 将数据覆盖进text的空间中
-	for (int i = 0; i <= 26; i++)
-	{
-		text[i] = malloc(MAX_LINE_LENGTH);
-		strcpy(text[i], buf[i]);
-	}
-
-	line_number = get_line_number(text);
-
-	show_text_syntax_highlighting(text);
-
-	changed = 1;
 }
 
 // 语法高亮
@@ -985,76 +895,4 @@ void show_text_syntax_highlighting(char *text[])
 		}
 	}
 	fprintf(1, "\n");
-}
-
-void com_rollback(char *text[], int n)
-{
-	// rollback the command
-	if (upper_bound < 0)
-	{
-		fprintf(1, "YAW-> \033[1m\e[41;33mcouldn't rollback\e[0m\n");
-		return;
-	}
-
-	char *input = malloc(MAX_LINE_LENGTH);
-	strcpy(input, command_set[upper_bound]);
-	upper_bound--;
-	// searching the first space of command
-	int pos = MAX_LINE_LENGTH - 1;
-	int j = 0;
-	for (; j < 10; j++)
-	{
-		if (input[j] == ' ')
-		{
-			pos = j + 1;
-			break;
-		}
-	}
-	// deal 'write' command
-	if (input[0] == 'i' && input[1] == 'n' && input[2] == 's')
-	{
-		// the line to be deleted
-		int line = stringtonumber(&input[4]);
-		com_delete(text, line, 0);
-		line_number = get_line_number(text);
-	}
-	// deal 'modify' command
-	else if (input[0] == 'm' && input[1] == 'o' && input[2] == 'd')
-	{
-		// the line to be modified
-		int line = stringtonumber(&input[4]);
-		// the content of modify
-		char *content = &input[pos];
-		com_modify(text, line, content, 0);
-		line_number = get_line_number(text);
-	}
-	// deal 'delete' command
-	else if (input[0] == 'd' && input[1] == 'e' && input[2] == 'l')
-	{
-		// the line to be deleted
-		int line = stringtonumber(&input[4]);
-		// the content of deletion
-		char *content = &input[pos];
-		com_write(text, line, content, 0);
-		line_number = get_line_number(text);
-	}
-}
-
-void record_command(char *command)
-{
-	if ((upper_bound + 1) < MAX_ROLLBAKC_STEP)
-	{
-		command_set[upper_bound + 1] = malloc(MAX_LINE_LENGTH);
-		strcpy(command_set[upper_bound + 1], command);
-		upper_bound++;
-	}
-	else
-	{
-		for (int i = 1; i < MAX_ROLLBAKC_STEP; i++)
-		{
-			strcpy(command_set[i - 1], command_set[i]);
-		}
-		strcpy(command_set[upper_bound], command);
-		upper_bound = MAX_ROLLBAKC_STEP - 1;
-	}
 }
