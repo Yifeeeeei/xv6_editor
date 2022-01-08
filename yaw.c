@@ -13,7 +13,6 @@
 #define BUF_SIZE 256
 #define MAX_LINE_NUMBER 256
 #define MAX_LINE_LENGTH 256
-#define MAX_ROLLBAKC_STEP 20
 #define NULL 0
 
 char *strcat_n(char *dest, char *src, int len); //用于字符串拼接
@@ -40,8 +39,6 @@ int auto_show = 1;
 //存储当前最大的行号，从0开始。即若line_number == x，则从text[0]到text[x]可用
 int line_number = 0;
 // 记录命令，作为回滚的凭借
-char *command_set[MAX_ROLLBAKC_STEP] = {};
-int upper_bound = -1;
 char keyword[100] = {'\0'};
 int searching = 0;
 int text_mode = 0; //模式：0-正常文字模式；1-代码模式，开启代码高亮
