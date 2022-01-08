@@ -16,17 +16,16 @@
 #define MAX_ROLLBAKC_STEP 20
 #define NULL 0
 
-
 char *strcat_n(char *dest, char *src, int len); //用于字符串拼接
 int get_line_number(char *text[]);
 void show_text(char *text[]);
-int com_write(char *text[], int n, char *extra, int flag);  //插入命令
+int com_write(char *text[], int n, char *extra, int flag);	 //插入命令
 void com_modify(char *text[], int n, char *extra, int flag); //修改命令
-void com_delete(char *text[], int n, int flag);			  //删除命令
-void com_help(char *text[]);							  //显示帮助
-void com_save(char *text[], char *path);				  //保存命令
-void com_exit(char *text[], char *path);				  //退出编辑器
-void com_create_new_file(char *text[], char *path);		  //
+void com_delete(char *text[], int n, int flag);				 //删除命令
+void com_help(char *text[]);								 //显示帮助
+void com_save(char *text[], char *path);					 //保存命令
+void com_exit(char *text[], char *path);					 //退出编辑器
+void com_create_new_file(char *text[], char *path);			 //
 void com_init_file(char *text[], char *path);
 void show_text_syntax_highlighting(char *text[]);
 void com_rollback(char *text[], int n);
@@ -64,8 +63,8 @@ char logo[] = "        \e[1;32m '%&$'    `|&%'\e    \e[1;34m.|&&|`\e	     \e[1;3
 int main(int argc, char *argv[])
 {
 	int is_new_file = 0;
-	
-	printf("\n%s\n\n%s\n\n",opening_line,logo);
+
+	printf("\n%s\n\n%s\n\n", opening_line, logo);
 
 	if (argc == 1)
 	{
@@ -187,7 +186,8 @@ int main(int argc, char *argv[])
 		// find
 		else if (strncmp(input, "find", 4) == 0)
 		{
-			com_find(text, &input[5]);
+			if (input[5])
+				com_find(text, &input[5]);
 		}
 		// modify
 		else if (strncmp(input, "modify", 6) == 0)
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 			com_save(text, argv[1]);
 		else if (strcmp(input, "exit") == 0)
 			com_exit(text, argv[1]);
-		else if (strcmp(input, "cm") == 0)
+		else if (strcmp(input, "changemode") == 0)
 		{
 			com_changemode();
 		}
@@ -613,21 +613,21 @@ void com_create_new_file(char *text[], char *path)
 void com_help(char *text[])
 {
 	fprintf(1, "\e[1;32mhelp information:\n\e[0m");
-	fprintf(1, "\e[1;33mhelp:\e[0m      | help information\n");
-	fprintf(1, "\e[1;30mwrite:\e[0m     | write any lines after last line,input \":exit\" to exit write mode\n");
-	fprintf(1, "\e[1;31mwrite-n:\e[0m   | write a line after line n\n");
-	fprintf(1, "\e[1;32mmodify:\e[0m    | modify the last line\n");
-	fprintf(1, "\e[1;33mmodify-n:\e[0m  | modify nth line \n");
-	fprintf(1, "\e[1;34mdelete:\e[0m    | delete the last line\n");
-	fprintf(1, "\e[1;35mdelete-n:\e[0m  | delete nth line \n");
-	fprintf(1, "\e[1;36mfind:\e[0m      | find keyword\n");
-	fprintf(1, "\e[1;37mshow:\e[0m      | enable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;30mhide:\e[0m      | disable show current contents after executing a command.\n");
-	fprintf(1, "\e[1;31mrollback:\e[0m  | rollback the file\n");
-	fprintf(1, "\e[1;32mdisplay:\e[0m   | display current file\n");
-	fprintf(1, "\e[1;33msave:\e[0m      | save the file\n");
-	fprintf(1, "\e[1;32mcm:\e[0m        | show/hide code syntaxing\n");
-	fprintf(1, "\e[1;34mexit:\e[0m      | exit editor\n");
+	fprintf(1, "\e[1;33mhelp\e[0m        | help information\n");
+	fprintf(1, "\e[1;30mwrite\e[0m       | write any lines after last line,input \":exit\" to exit write mode\n");
+	fprintf(1, "\e[1;31mwrite-n\e[0m     | write a line after line n\n");
+	fprintf(1, "\e[1;32mmodify\e[0m      | modify the last line\n");
+	fprintf(1, "\e[1;33mmodify-n\e[0m    | modify nth line \n");
+	fprintf(1, "\e[1;34mdelete\e[0m      | delete the last line\n");
+	fprintf(1, "\e[1;35mdelete-n\e[0m    | delete nth line \n");
+	fprintf(1, "\e[1;36mfind keyword\e[0m| find keyword\n");
+	fprintf(1, "\e[1;37mshow\e[0m        | enable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;30mhide\e[0m        | disable show current contents after executing a command.\n");
+	fprintf(1, "\e[1;31mrollback\e[0m    | rollback the file\n");
+	fprintf(1, "\e[1;32mdisplay\e[0m     | display current file\n");
+	fprintf(1, "\e[1;33msave\e[0m        | save the file\n");
+	fprintf(1, "\e[1;32mchangemode\e[0m  | show/hide code syntaxing\n");
+	fprintf(1, "\e[1;34mexit\e[0m        | exit editor\n");
 }
 
 // 预留数据
@@ -664,7 +664,7 @@ void com_init_file(char *text[], char *path)
 	strcpy(buf[23], "		continue;");
 	strcpy(buf[24], "	}");
 	strcpy(buf[25], "}");
-
+	strcpy(buf[26], "// demo | made by Shaun Fong");
 
 	// 将数据覆盖进text的空间中
 	for (int i = 0; i <= 26; i++)
@@ -732,16 +732,9 @@ void show_text_syntax_highlighting(char *text[])
 					// mark++;
 					continue;
 				}
-
-				// numbers
-
-				if (text[j][mark] >= '0' && text[j][mark] <= '9')
-				{
-					fprintf(1, "\033[0;33m%c\033[0m", text[j][mark]);
-					mark++;
-				}
 				// keyword
-				else if ((mark + strlen(keyword)) < MAX_LINE_LENGTH && searching && (strncmp(text[j] + mark, keyword, strlen(keyword)) == 0))
+				
+				if ((mark + strlen(keyword)) < MAX_LINE_LENGTH && searching && (strncmp(text[j] + mark, keyword, strlen(keyword)) == 0))
 				{
 					for (int t = 0; t < strlen(keyword); t++)
 					{
@@ -749,6 +742,14 @@ void show_text_syntax_highlighting(char *text[])
 					}
 					mark = mark + strlen(keyword);
 				}
+				// numbers
+
+				else if (text[j][mark] >= '0' && text[j][mark] <= '9')
+				{
+					fprintf(1, "\033[0;33m%c\033[0m", text[j][mark]);
+					mark++;
+				}
+				
 				// else if (text_mode == 1)
 				// {
 				/*在代码模式下需要显示的东西*/
